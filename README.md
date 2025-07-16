@@ -8,9 +8,9 @@ fad... ahem.
 date**.  The **activity date** is derived from the date-time-modified of the most recently
 modified entry *within* each directory.
 
-`fad` differs from "`find -mtime`" and "`find -newer`" in that it analyses activity
-*within* each directory to confer an **activity date** on the parent as opposed to only
-comparing the directory's date-time-modified against a fixed age or file.
+`fad` differs from "find -mtime" and "find -newer" in that it analyses activity *within*
+each directory to confer an **activity date** on the parent as opposed to only comparing
+the directory's date-time-modified against a fixed age or file.
 
 The output lists directories in **activity date** order starting with the most recently
 active first. By way of example, if `fad` scans the following directory structure on
