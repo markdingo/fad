@@ -1,26 +1,28 @@
-name: codecov
+name: Run tests and upload coverage
 
-on: [push, pull_request]
+on:
+  push
 
 jobs:
-  run:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-        go: [ 1.19.x ]
-    runs-on: ${{ matrix.os }}
+  test:
+    name: Run tests and collect coverage
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go }}
+      - name: Set up Go
+        uses: actions/setup-go@v5
 
-    - name: Generate Coverage Report
-      run: go test ./... -coverprofile=coverage.txt -covermode=atomic
+      - name: Install dependencies
+        run: go mod download
 
-    - name: Upload Coverage Report to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.txt
+      - name: Run tests
+        run: go test -coverprofile=coverage.txt
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
