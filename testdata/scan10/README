@@ -1,3 +1,6 @@
 This directory contains exactly 10 files. Tests rely on this.
 
-This file should be the most recently modified in the directory.
+This file should be the most recently modified in the directory, however github does
+something funny with DTM under the covers so we might have to force a more recent version
+to get tests to work.
+
