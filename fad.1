@@ -1,0 +1,502 @@
+.Dd July 16, 2025
+.Dt FAD 1
+.Os
+.Sh NAME
+.Nm fad
+.Nd find active directories
+.Sh SYNOPSIS
+.Nm
+.Fl h | Fl Fl help | Fl Fl manpage | Fl v | Fl Fl version
+.Pp
+.Nm
+.Bk -words
+.Op Fl Fl age Ar maximum-age-to-print
+.Op Fl Fl count Ar maximum-items-to-print
+.Op Fl Fl depth Ar maximum-descend-depth
+.Op Fl Fl ibases Ar Ignore-bases
+.Op Fl Fl icontains Ar Ignore-strings
+.Op Fl Fl iregexes Ar Ignore-regexes
+.Op Fl Fl itypes Ar Ignore-types
+.Op Fl Fl pdirname
+.Op Fl Fl pignored
+.Op Fl Fl pstats
+.Op Fl q
+.Op Fl Fl scanners Ar maximum-concurrency
+.Op Pa path ...
+.Ek
+.Sh DESCRIPTION
+.Nm
+recursively searches each
+.Ar path
+to find directories with the most recent
+.Em activity date .
+The
+.Em activity date
+is derived from the
+.Sy date-time-modified
+of the most recently modified
+entry
+.Em within
+each directory.
+The current working directory is the default
+.Ar path .
+.Pp
+.Nm
+differs from
+.Sq find -mtime
+and
+.Sq find -newer
+in that it compares activity
+.Em within
+each directory as opposed to only comparing the directory's
+.Sy date-time-modified
+against a fixed age or file.
+The over-arching goal is to present directories of
+.Dq interest
+first.
+.Pp
+Output consists of directory details and their most
+recently modified file in
+.Em activity date
+order.
+The number of directories listed is controlled by
+.Fl Fl count
+and
+.Fl Fl age .
+.Pp
+It is possible to set per-user defaults via the
+.Pa defaults.conf
+file in the users configuration directory
+as described in the
+.Sx FILES
+section.
+.Pp
+.Nm
+is designed to answer questions like:
+.Bl -bullet -offset indent
+.It
+Which project directories have I been working on recently?
+.It
+What system logging directories have been written to recently?
+.It
+Have any /etc configuration directories just changed?
+.El
+.Pp
+The
+.Sx EXAMPLES
+section shows how these questions are answered.
+.Pp
+Typical output looks like this:
+.Bd -literal
+ 2s:f:/var/log/audit/audit_20250611.log
+35s:f:/var/log/utx.lastlogin
+ 3m:f:/var/log/system/system_20250611.log
+ 4m:f:/var/log/dhcpd/dhcpd_20250611.log
+18m:f:/var/log/configd/configd_20250611.log
+37m:L:/var/log/routing/latest.log
+ 2D:f:/var/log/routing/frr/frr_20250609.log
+ ...
+.Ed
+.Pp
+The first column is a compact representation of age, e.g.
+.Sq 2D
+means two days old, the second column is the file-system type and the
+third column contains the active directory and the entry conferring
+its
+.Dq "activity date" .
+.Pp
+In the above example, the first line with an
+.Sq age
+of
+.Sq 2s
+indicates that
+.Sq /var/log/audit
+was recently active due to
+.Sq audit_20250611.log
+being modified 2 seconds ago.
+The second line with an
+.Sq age
+of
+.Sq 35s
+indicates that
+.Sq /var/log
+was recently active due to
+.Sq utx.lastlogin
+being modified 35 seconds ago.
+.Pp
+The
+.Sq age
+column uses the same conventions as
+.Fl Fl age
+and the
+.Sq "file-system"
+column uses the same conventions as
+.Fl Fl itypes .
+.Sh OPTIONS
+Options consist of:
+.Sx Documentation Options
+and
+.Sx Scanning Options .
+If any
+.Sx Documentation Options
+are present, no scanning is performed.
+.Ss Documentation Options
+.Bl -tag -width indent
+.It Fl h , Fl Fl help
+Print command-line usage, defaults and version details.
+.It Fl Fl manpage
+Print the manpage to stdout for possible piping into
+.Xr mandoc 1 .
+.It Fl v , Fl Fl version
+Print
+version and project details.
+.El
+.Ss Scanning Options
+.Bl -tag -width indent
+.It Fl Fl age Ar maximum-age
+Prints all directories with an
+.Em activity date
+not older than
+.Ar maximum-age .
+The default of
+.Sq zero
+means that
+.Fl Fl age
+does not apply.
+.Pp
+If both
+.Fl Fl age
+and
+.Fl Fl count
+are set greater than zero, then they both apply.
+.Pp
+The
+.Ar maximum-age
+value is of the form of an integer followed by a unit such as
+.Sq 5D ,
+.Sq 1M
+or
+.Sq 55s .
+Valid units are:
+.Bl -column "Unit" "Meaning" "Multiplication Factor"
+.It Sy Unit Ta Sy Meaning Ta Sy Multiplication Factor
+.It s Ta second Ta 1
+.It m Ta minute Ta 60 * second
+.It h Ta hour Ta 60 * minute
+.It D Ta Day Ta 24 * hour
+.It W Ta Week Ta 7 * Day
+.It M Ta Month Ta Year / 12
+.It Y Ta Year Ta 365D + 5h + 49m + 12s (Gregorian Year)
+.El
+.It Fl Fl count Ar maximum-items-to-print
+The number of active directories to print.
+The default of
+.Sq 23
+items nicely fits on a modern 24x80 Uniscope 100 without scrolling off
+the screen.
+.Pp
+If both
+.Fl Fl age
+and
+.Fl Fl count
+are set greater than zero, then they both apply.
+.It Fl Fl depth Ar maximum-descend-depth
+How far to descend into each
+.Ar path
+nominated on the command line.
+The default of
+.Sq zero
+means unlimited and, since symbolic links are
+.Em not
+followed, that
+.Em should
+mean that search loops are not possible.
+A value of 1 implies scanning the nominated
+.Ar paths
+without any descending.
+.It Fl ibases Sx Comma-String
+Ignore paths with a
+.Sy basename
+matching any string in
+.Sx Comma-String .
+This comparison is an exact case-sensitive match against the
+.Sy basename
+of the path.
+.Pp
+.Nm
+is compiled with system-dependent defaults for
+.Fl Fl ibases
+which are displayed with
+.Fl h .
+.It Fl icontains Sx Comma-String
+Ignore paths which contain any of the strings in
+.Sx Comma-String .
+This is a case-insensitive
+comparison aginst the complete path so
+.Sx Comma-String
+can reasonably contain directory seperators.
+.It Fl iregexes Sx Comma-String
+Ignore paths which match any of the
+.Sy regular-expressions
+in
+.Sx Comma-String .
+The syntax of these regular expressions is the same general syntax
+used by
+.Sy Perl ,
+.Sy Python
+and
+.Sy egrep .
+More details are available at
+.Lk https://pkg.go.dev/regexp
+and
+.Lk https://github.com/google/re2/wiki/Syntax .
+.It Fl Fl itypes Sx Comma-String
+Ignore file-system objects matching types in
+.Sx Comma-String .
+Valid types are:
+.Bl -column "Type" "Meaning"
+.It Sy Type Ta Sy Meaning
+.It D Ta Device
+.It L Ta Symbolic Link
+.It S Ta Socket
+.It T Ta Temporary Plan 9 file
+.It c Ta Character device
+.It d Ta Directory
+.It f Ta Regular File
+.It p Ta Named Pipe
+.El
+.Pp
+The default of
+.Sq d
+causes
+.Nm
+to ignore the
+.Sy date-time-modified
+of a sub-directory when determining the
+.Em activity date
+of a directory.
+.Pp
+It is unlikely you will want to remove this default as a sub-directory
+is in the unique position of potentially having the most recent
+.Sy date-time-modified
+caused by a removal of a file-system object.
+In other words, it can be listed as the conferring file-system object
+without any remaining evidence as to what caused the recent
+.Sy date-time-modified .
+This is generally not very useful output.
+.It Fl Fl pdirname
+Print just the
+.Sy dirname
+of the active paths.
+That is, the directory entry component which confers its
+.Sy date-time-modified
+to the parent directory is not printed.
+The default is
+.Em false .
+.It Fl Fl pignored
+Print paths ignored by any of the
+.Fl Fl i*
+ignore options.
+The output path is prefixed with
+.So
+Ignored:
+.Sc
+to differentiate from the regular output.
+The default is
+.Em false .
+.It Fl Fl pstats
+Print scanning statistics and concurrency data on program exit.
+The default is
+.Em false .
+The output format is:
+.Bd -literal
+Elapse: 0.7s 4/10 Found: 11 Dirs: 18 Files: 52 Others: 1 Ignored: 1 Errors: 0
+.Ed
+.Bl -column "Stats Item" "Description"
+.It Sy Stats Item Ta Sy Description
+.It Elapse: 0.7s Ta Scan time in wall-clock seconds
+.It 4/10 Ta 4 concurrent scanners from a maximum pool of 10
+.It Found: 11 Ta Number of active files printed
+.It Dirs: 18 Ta Directories scanned
+.It Files: 52 Ta Files examined
+.It Others: 52 Ta Other file-system objects (e.g. pipes and symlinks)
+.It Ignored: 1 Ta Paths ignored
+.It Errors: 0 Ta File-system access failures
+.El
+.It Fl q
+Normally when
+.Nm
+is unable to access a file-system object, it generates an error
+message.
+This option suppresses that output but does not affect the
+consequential
+.Sx EXIT STATUS .
+The default is
+.Em true .
+.It Fl scanners Ar count
+Specify the maximum number of goroutine which can concurrently scan
+directories at any one time.
+The main reason to constrain concurrency is to avoid thrashing the filesystem
+by initiating too many directory scans at the same time.
+.Pp
+The default of
+.Sq 10
+has been empirical determined.
+Increasing this value probably only make sense when
+.Nm
+is asked to scan a large number of file-systems on different physical
+devices and the system has sufficient CPUs to concurrently process the
+results.
+.Pp
+The
+.Fl Fl pstats
+output includes concurrency details.
+.El
+.Ss Comma-String
+A
+Comma-String
+is a list of strings separated by a
+.Sq ","
+such as:
+.Dq .DS_Store,.profile ,
+.Dq cache,.git
+or
+.Dq [[:upper:]],[[:digit:]] .
+.Pp
+If
+.Sx Comma-String
+is prefixed with
+.Sq + ,
+then the
+.Sx Comma-String
+list is appended to any pre-existing values loaded from the configuration
+file or pre-configured within
+.Nm .
+If
+.Sx Comma-String
+is not prefixed with
+.Sq +
+then the
+.Sx Comma-String
+values replace any pre-existing values.
+.Sh FILES
+.Nm
+attempts to read the per-user
+.Pa defaults.conf
+file which overrides command line argument defaults.
+This file is located in a system-dependent configuration directory which,
+on a Unix system, is normally
+.Pa $HOME/.config/fad .
+However, since the exact location can only be determined at run-time,
+the path is printed by
+.Nm
+when invoked with
+.Fl h .
+.Pp
+.Pa defaults.conf
+is a text file with each line containing a command line option without
+the leading
+.Dq -
+followed by the overriding value.
+Whitespace lines are ignored and all text after the comment character
+.Dq #
+is ignored.
+The precedence for options is that command line options override
+.Pa defaults.conf
+which override compiled-in defaults.
+.Pp
+A typical configuration file might look like this:
+.Bd -literal -offset indent
+# Last updated 25Jun2025
+
+depth 5         # Don't go too deep
+scanners 20     # My system can handle more concurrency
+pstats true     # Always report stats
+icontains +/tmp # Never scan any temp dir
+ibase +Library,Caches,.git,.emacs.d # Don't care about these
+.Ed
+.Pp
+Note that boolean options
+.Em must
+contain a value, as shown with
+.Sq pstats .
+.Pp
+Unknown options, duplicate options and nonsensical options (such as
+.Fl h )
+result in an error.
+.Sh EXIT STATUS
+.Nm
+follows
+.Xr sysexits 3
+conventions with EX_OK(0) signifying that all paths were successfully scanned;
+EX_USAGE signifies an invocation error and EX_OSFILE indicates that access was
+denied to at least one file system object encountered during the scan.
+.Sh EXAMPLES
+.Bl -dash
+.It
+Show all recently active directories within the current
+working directory.
+.Bd -literal -offset indent
+.Sy $ fad
+.Ed
+.It
+Find log directories with recent activity.
+.Bd -literal -offset indent
+.Sy $ fad /var/log
+.Ed
+.It
+Search my
+.Sy ~/Projects
+to discover which directories have been recently modified while
+ignoring filesystem objects with basenames of
+.Sy .git
+and
+.Sy .cache .
+.Bd -literal -offset indent
+.Sy $ fad -ibases .git,.cache ~/Projects
+.Ed
+.It
+Same as above except this time the basenames of
+.Sy .git
+and
+.Sy .cache
+are added to any pre-configured ignore filters.
+.Bd -literal -offset indent
+.Sy $ fad -ibases +.git,.cache ~/Projects
+.Ed
+.It
+Discover which configuration directories in
+.Sy /etc
+are modified by
+.Sy some-sysadmin-command .
+.Bd -literal -offset indent
+.Sy # some-sysadmin-command
+.Sy # fad -age 1m /etc
+.Ed
+.It
+Find active directories in
+.Pa $HOME
+while ignoring filesystem objects containing upper case characters or
+numeric digits.
+.Bd -literal -offset indent
+.Sy $ fad $HOME -iregexes '[[:upper:]],[[:digit:]]'
+.Ed
+.Pp
+(Yes, this is a somewhat contrived example to demonstrate the use
+of regex filtering.)
+.El
+.Sh SEE ALSO
+.Xr basename 1 ,
+.Xr dirname 1 ,
+.Xr find 1 ,
+.Xr mandoc 1 ,
+.Xr sysexits 3 ,
+.Xr re_format 7
+.Sh AUTHORS
+The
+.Nm
+program and manual page were written by
+.An Mark Delany .
+.Sh BUGS
+Bug reports, feature requests and feedback are welcome at the official
+.Lk https://github.com/markdingo/fad "project web site"
