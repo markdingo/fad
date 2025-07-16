@@ -43,10 +43,10 @@ Typical questions `fad` is designed to answer are:
 
 | Question | Invocation
 | :---- | :---------
-| Which project have I been working on recently? | `fad` ~/Projects
-| What `syslog` directories have been written to recently? | `fad` /var/log
-| Have any configuration directories just changed? | `fad` -age 5m /etc /usr/local/etc /opt/etc
-| My boss wants to know what I worked on last week - help! | `fad` -age 1W $HOME
+| Which project have I been working on recently? | `fad ~/Projects`
+| What `syslog` directories have been written to recently? | `fad /var/log`
+| Have any configuration directories just changed? | `fad -age 5m /etc /usr/local/etc /opt/etc`
+| My boss wants to know what I worked on last week - help! | `fad -age 1W $HOME`
 
 ### Project Status
 
