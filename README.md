@@ -98,7 +98,7 @@ directories with:
 fad $HOME /usr/local
 ```
 
-All being well `fad` should display the directory containing iself at or near the top of
+All being well `fad` should display the directory containing itself at or near the top of
 the list.
 
 ### Community
