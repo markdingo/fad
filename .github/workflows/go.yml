@@ -10,6 +10,11 @@ jobs:
         go: [ 1.19.x ]
     runs-on:
       - ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
     steps:
       - name: Set up Go
         uses: actions/setup-go@v3
