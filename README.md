@@ -58,8 +58,8 @@ Typical questions `fad` is designed to answer are:
 
 ## Installation
 
-`fad` can be installed with "`go install`" if you only wish to install the executable in
-your home directory or you can use the more traditional "`make install`" method if you want
+`fad` can be installed with "go install" if you only wish to install the executable in
+your home directory or you can use the more traditional "make install" method if you want
 to install the executable and manpage in `/usr/local`.
 
 ### `go install`
@@ -73,14 +73,15 @@ for the latest official release, or if you're after the leading edge:
 go install github.com/markdingo/fad@main
 ```
 
-`go install` performs all the downloading, building and installing with the executable
-ending up in either `$GOPATH/bin`, `$HOME/go/bin` or `$GOBIN` depending on your setup.
+The "go install" invocation performs all the downloading, building and installing with the
+executable ending up in one of `$GOPATH/bin`, `$HOME/go/bin` or `$GOBIN` depending on your
+setup.
 
 ### `make install`
 
-The main reason to prefer the traditional install method is so that the executable and
-manpage are installed in `/usr/local/`. With this method you need to clone the repo and
-run `make`:
+The main reason to prefer the traditional "make install" method is so that the executable
+and manpage are installed in `/usr/local/`. With this method you need to clone the repo
+and run `make`:
 
 ```bash
 git clone https://github.com/markdingo/fad.git
