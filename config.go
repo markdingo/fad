@@ -59,7 +59,7 @@ func init() {
 
 func fTypeString(mode fs.FileMode) string {
 	switch {
-	case (mode & fs.ModeTemporary) != 0: // A Plan 9 thing - must preceed IsRegular() case
+	case (mode & fs.ModeTemporary) != 0: // A Plan 9 thing - must precede IsRegular() case
 		return fTypeTemporary
 	case (mode & fs.ModeSymlink) != 0:
 		return fTypeSymlink
