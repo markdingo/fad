@@ -65,16 +65,11 @@ to install the executable and manpage in `/usr/local`.
 ### `go install`
 
 ```bash
-go install github.com/markdingo/fad@latest
-```
-for the latest official release, or if you're after the leading edge:
-
-```bash
 go install github.com/markdingo/fad@main
 ```
 
 `go install` performs all the downloading, building and installing with the executable
-ending up in either `$GOPATH/bin` or `$HOME/go/bin`, depending on your setup.
+ending up in either `$GOPATH/bin`, `$HOME/go/bin` or $GOBIN depending on your setup.
 
 ### `make install`
 
