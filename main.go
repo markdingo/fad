@@ -60,7 +60,7 @@ func realMain(start time.Time, args []string, confFunc userConfigDirFunc, stdout
 
 	allCandidates := newCandidates(int(cfg.maxCount.v), cfg.maxAge)
 	cc := newConcurrencyController(int(cfg.maxScanners.v))
-	scn := newScanner(cfg, cc, allCandidates, time.Now(), stderr)
+	scn := newScanner(cfg, cc, allCandidates, start, stderr)
 	for _, dirName := range scanList {
 		dirName = filepath.Clean(dirName) // Clean here so we can avoid .Join/Clean later
 		scn.descend(0, dirName)           // Runs a goroutine
