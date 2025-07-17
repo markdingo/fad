@@ -11,7 +11,7 @@ CMDDEPENDS=$(GENERATED) *.go Makefile $(MANPAGE)
 all: $(CMD)
 
 $(CMD): $(CMDDEPENDS)
-	go build
+	go build -tags local
 
 version.go:	generate_version.sh ChangeLog.md go.mod Makefile
 	sh generate_version.sh ChangeLog.md version.go
@@ -27,7 +27,7 @@ clean:
 
 .PHONY: vet
 vet:	$(GENERATED)
-	go vet ./...
+	go vet -tags local ./...
 	mandoc -Tlint $(MANPAGE); exit 0
 
 .PHONY: install
@@ -35,8 +35,12 @@ install: $(BINDIST)/$(CMD) $(MANDIST)/$(MANPAGE)
 
 .PHONY: test tests
 
+# The "local" tag is my convention for any build or test requirements which can only be
+# satisified on a local system with a regular local file system. This is largely used to
+# turn off some tests which fail on github because it presents a funky file system which
+# is not POSIX.
 test tests: $(GENERATED)
-	go test -race -v
+	go test -tags local -race -v
 
 $(BINDIST)/$(CMD): $(CMD) Makefile
 	install -d -m u=rwx,go=rx $(BINDIST) # Ensure destination exists
@@ -54,5 +58,5 @@ $(MANDIST)/$(MANPAGE): $(MANPAGE) Makefile
 windows: fad.exe
 fad.exe: $(CMDDEPENDS)
 	@echo 'Building for Windows amd64 (10 or higher)'
-	@GOOS=windows GOARCH=amd64 go build
+	@GOOS=windows GOARCH=amd64 go build -tags local
 	@file $(CMD).exe
