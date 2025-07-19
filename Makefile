@@ -1,5 +1,4 @@
-ROOT=/usr/local
-# ROOT=$(HOME)
+ROOT:=/usr/local	# make install ROOT=~
 BINDIST=$(ROOT)/bin
 MANDIST=$(ROOT)/man/man1
 CMD=fad
