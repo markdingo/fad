@@ -8,9 +8,9 @@ import (
 	"testing"
 )
 
-// Check basic scaner functionality. That scan returns a single entry which is also the
+// Check basic scanner functionality. That scan returns a single entry which is also the
 // one with the most recent DTM. Unfortunately this test fails on github for reasons to do
-// with their funky file-system so it's only run on a non-gitgub environment.
+// with their funky file-system so it's only run on local development systems.
 func TestScannerBasic(t *testing.T) {
 	var stderr bytes.Buffer
 	cfg := newConfig(flag.NewFlagSet(Name, flag.ContinueOnError),

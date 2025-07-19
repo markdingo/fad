@@ -36,9 +36,9 @@ install: $(BINDIST)/$(CMD) $(MANDIST)/$(MANPAGE)
 .PHONY: test tests
 
 # The "local" tag is my convention for any build or test requirements which can only be
-# satisified on a local system with a regular local file system. This is largely used to
-# turn off some tests which fail on github because it presents a funky file system which
-# is not POSIX.
+# safely satisified on a local development system. This is largely used to turn off tests
+# which fail on github because it presents a funky file system or some other non-standard
+# behavior.
 test tests: $(GENERATED)
 	go test -tags local -race -v
 
