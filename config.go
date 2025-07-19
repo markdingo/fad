@@ -174,9 +174,6 @@ func (cfg *config) setInternalDefaults() {
 	if cfg.maxCount.v == 0 {
 		cfg.maxCount.v = defaultPrintLimit
 	}
-	if cfg.maxCount.min == 0 {
-		cfg.maxCount.min = 1
-	}
 	if cfg.maxScanners.v == 0 {
 		cfg.maxScanners.v = defaultScannerLimit
 	}

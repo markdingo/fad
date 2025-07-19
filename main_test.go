@@ -19,7 +19,7 @@ func TestMainOptions(t *testing.T) {
 		{[]string{"-v"}, "", EX_OK, "Version:", ""},
 		{[]string{"-h"}, "", EX_OK, "SYNOPSIS", ""},
 		{[]string{"--manpage"}, "", EX_OK, ".Nm fad", ""},
-		{[]string{"--count", "0"}, "", EX_USAGE, "", "invalid value"},
+		{[]string{"--count", "-1"}, "", EX_USAGE, "", "invalid value"},
 		{[]string{}, "", EX_OK, ":f:", ""}, // scanList default to "."
 		{[]string{"-pstats"}, "", EX_OK, "Elapse:", ""},
 		{[]string{"/dev/null"}, "", EX_OSFILE, "", "/dev/null is not a directory"},
