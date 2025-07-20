@@ -80,14 +80,25 @@ setup.
 ### `make install`
 
 The main reason to prefer the traditional "make install" method is so that the executable
-and manpage are installed in `/usr/local/`. With this method you need to clone the repo
-and run `make`:
+*and* the manpage are installed and that you can control that installation location. With
+this method you need to clone the repo and run `make`.
+
+To install in `/usr/local`, run:
 
 ```bash
 git clone https://github.com/markdingo/fad.git
 cd fad
 make all
 sudo make install
+```
+
+and to install in an alternate `ROOT` location, such as your `$HOME`, run:
+
+```bash
+git clone https://github.com/markdingo/fad.git
+cd fad
+make all
+make install ROOT=$HOME
 ```
 
 A good first test of `fad` is to ask it to find your recently active installation
