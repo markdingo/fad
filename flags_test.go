@@ -57,3 +57,18 @@ func TestFlagsSet(t *testing.T) {
 		}
 	}
 }
+
+func TestFlagMin(t *testing.T) {
+	var f uintFlag
+	f.min = 1         // Set minimum to 1
+	err := f.Set("0") // and try and set to zero
+	if err == nil {
+		t.Fatal("Expected an error trying to set a min value to zero")
+	}
+
+	got := err.Error()
+	exp := "Less than minimum"
+	if !strings.Contains(got, exp) {
+		t.Error("Expected 'Less than minimum', but got", got)
+	}
+}
