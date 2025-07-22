@@ -1,4 +1,4 @@
-.Dd July 16, 2025
+.Dd July 22, 2025
 .Dt FAD 1
 .Os
 .Sh NAME
@@ -158,9 +158,7 @@ Prints all directories with an
 .Em activity date
 not older than
 .Ar maximum-age .
-The default of
-.Sq zero
-means that
+The default of zero means that
 .Fl Fl age
 does not apply.
 .Pp
@@ -194,6 +192,9 @@ The default of
 .Sq 23
 items nicely fits on a modern 24x80 Uniscope 100 without scrolling off
 the screen.
+If set to zero then
+.Fl Fl count
+does not apply.
 .Pp
 If both
 .Fl Fl age
