@@ -466,6 +466,16 @@ are added to any pre-configured ignore filters.
 .Sy $ fad -ibases +.git,.cache ~/Projects
 .Ed
 .It
+Same as above except all directories are listed by activity date by
+setting
+.Fl Fl count
+to zero and leaving
+.Fl Fl age
+to default to zero.
+.Bd -literal -offset indent
+.Sy # fad --ibases +.git,.cache --count 0 ~/Projects
+.Ed
+.It
 Discover which configuration directories in
 .Sy /etc
 are modified by
