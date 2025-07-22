@@ -48,7 +48,7 @@ Typical questions `fad` is designed to answer are:
 | Have any configuration directories just changed? | `fad -age 5m /etc /usr/local/etc /opt/etc`
 | My boss wants to know what I worked on last week - help! | `fad -age 1W $HOME`
 
-### Project Status
+## Project Status
 
 [![Build Status](https://github.com/markdingo/fad/actions/workflows/go.yml/badge.svg)](https://github.com/markdingo/fad/actions/workflows/go.yml)
 [![codecov](https://codecov.io/gh/markdingo/fad/branch/main/graph/badge.svg)](https://codecov.io/gh/markdingo/fad)
@@ -101,6 +101,8 @@ make all
 make install ROOT=$HOME
 ```
 
+## Testing
+
 A good first test of `fad` is to ask it to find your recently active installation
 directories with:
 
@@ -112,13 +114,13 @@ fad $HOME /usr/local
 All being well `fad` should display the directory containing itself at or near the top of
 the list.
 
-### Community
+## Community
 
 If you have any problems using `fad` or suggestions on how it can do a better job,
 don't hesitate to create an [issue](https://github.com/markdingo/fad/issues) on
 the project home page. This package can only improve with your feedback.
 
-### Copyright and License
+## Copyright and License
 
 `fad` is Copyright :copyright: 2025 Mark Delany. This software is licensed under the
 BSD 2-Clause "Simplified" License.
