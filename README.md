@@ -54,7 +54,7 @@ Typical questions `fad` is designed to answer are:
 [![codecov](https://codecov.io/gh/markdingo/fad/branch/main/graph/badge.svg)](https://codecov.io/gh/markdingo/fad)
 [![Go Report Card](https://goreportcard.com/badge/github.com/markdingo/fad)](https://goreportcard.com/report/github.com/markdingo/fad)
 
-`fad` is known to run on FreeBSD, macOS, Linux and Windows and requires go 1.19 or later.
+`fad` is known to run on FreeBSD, macOS, Linux and Windows and requires go 1.22 or later.
 
 ## Installation
 

@@ -56,7 +56,7 @@ func newConcurrencyController(limit int) *concurrencyController {
 	cc := &concurrencyController{limit: limit, minimum: limit,
 		tokens: make(chan concurrencyToken, limit)}
 
-	for ; limit > 0; limit-- { // With go 1.22, change to "for range limit"
+	for range limit {
 		cc.tokens <- concurrencyToken{}
 	}
 

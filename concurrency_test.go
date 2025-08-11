@@ -30,7 +30,7 @@ func TestConcurrency(t *testing.T) {
 		t.Error("New controller has wrong capacity of", cap(cc.tokens), "expected", limit)
 	}
 
-	for ix := 0; ix < limit*multiplier; ix++ { // go 1.22 for ix := range limit*multiplier
+	for ix := range limit * multiplier {
 		wg.Add(1)
 		go func(myx int) {
 			cc.start()
