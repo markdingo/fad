@@ -119,6 +119,7 @@ the list.
 If you have any problems using `fad` or suggestions on how it can do a better job,
 don't hesitate to create an [issue](https://github.com/markdingo/fad/issues) on
 the project home page. This package can only improve with your feedback.
+AI-generated contributions are forbidden.
 
 ## Copyright and License
 
